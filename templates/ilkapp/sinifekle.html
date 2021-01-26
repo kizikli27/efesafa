@@ -1,0 +1,117 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% load django_template_maths %}
+{% load mathfilters %}
+{% block title %}
+Sınıflar
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h1>Kayıt İşlemi Başarılı</h1>
+      {% elif deleted %}
+        <h1>Öğrencisi Olan Sınıfı Silemezsiniz</h1>
+      {% elif tmm %}
+        <h1>Sınıf Silme İşlemi Başarılı</h1>
+      {%elif tmmupdate%}
+        <h1>Öğrencisi Olan Sınıfın Adını Düzenleyemezsiniz</h1>
+      {% else %}
+        <h1>Sınıflar</h1>
+        <h3>Sınıf işlemleri.</h3>
+
+        </div>
+        </div>
+        <div class="container">
+ {% if user.is_authenticated and request.user|has_group:"idare" or request.user|has_group:"kurum" %}        
+<form enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+      
+  {% if user.is_authenticated and request.user|has_group:"idare"%} 
+    
+  <div class="form-group col-sm-10">
+      <label >Kurum Kodu</label>
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+    </div>  
+       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
+      </div>
+      {%endif%}
+    <div class="form-group col-sm-10">
+      <label >Sınıf Adı</label>
+      <input type="text" class="form-control" id="fname" onblur="myFunction()" name="ksinifi" placeholder="Sınıf Adını Girniz" maxlenght="11">
+    </div>
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalLong">
+  Sınıfı Kaydet
+</button>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Kaydet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+      
+        Sınıf kaydı tamamlanacak...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button type="submit"  class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  
+</div>
+    
+    </div></div></div>
+        
+      </form>   
+      {%endif%}
+  
+ 
+
+<div class="container">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sıra</th>  
+      <th scope="col">Sınıf Adı</th>
+      <th scope="col">Öğrenci Listesi</th>
+       {% if user.is_authenticated and request.user|has_group:"idare" or  request.user|has_group:"kurum"%} 
+      <th scope="col">Sil</th>
+      <th scope="col">Güncelle</th>
+      {%endif%}
+      <th scope="col">Mesaj Gönder</th>
+       <th scope="col">Liste Al</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+   {% for todo in liste %}
+     <tr>
+       <td>{{forloop.counter}} </td>
+        <td> {{todo.ksinifi}}</td>
+        <td> <a href="{% url 'siniflisteleri' todo.last_name todo.ksinifi  %}" type="button" class="btn btn-outline-success">Öğrenci Listesi</a> </td>
+         {% if user.is_authenticated and request.user|has_group:"idare" or  request.user|has_group:"kurum"%} 
+        <td> <a href="{% url 'deletesinif' todo.id %}" type="button" class="btn btn-outline-success">Sınıfı Sil</a></td>
+        <td> <a href="{% url 'sinifupdate' todo.id %}" type="button" class="btn btn-outline-success">Sınıf Adını Düzenle</a></td>
+         {%endif%}
+        <td> <a href="{% url 'message' todo.last_name todo.ksinifi %}" type="button" class="btn btn-outline-success">Sınıfa Mesaj Gönder</a></td>
+        <td><a type="button" class="btn btn-outline-danger" href="{% url 'pdfolustur' todo.ksinifi 'sinif'  %}"><i class="fas fa-file-pdf fa-lg" ></i></a> </td>
+     </tr>
+         
+        
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+
+
+{% endblock content %}

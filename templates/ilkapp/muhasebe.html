@@ -1,0 +1,97 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Ana Sayfa
+{% endblock title %}
+{% load static %}
+{% block style%}
+<style>
+.divim{
+  
+  width:50%;
+  height:50%;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:rgba(255, 255, 255, 1);
+}
+  
+  </style>
+{% endblock style%}
+{% block content %}
+<div class="divim">
+  <form method="POST">
+ {% csrf_token %}
+  <div class="form-row">
+   {% if user.is_authenticated and request.user|has_group:"muhasebe" %} 
+    
+  <div class="form-group col-sm-10">
+      <label ><strong>Kurum Kodu</strong></label>
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+    </div>  
+       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label><strong>Kurum Kodu</strong></label>
+       <input type="text" class="form-control-plaintext" readonly name="last_name"  value="{{user.username}}">
+      </div>
+      {%endif%}
+      <div class="form-group col-sm-10">
+      <label><strong>İşlemi Yapan</strong></label>
+      <input type="text" class="form-control-plaintext" readonly value="{{user.first_name}}"  name="odemeyialan">
+    </div>
+    <div class="form-group col-sm-10">
+       <label><strong>Öğrencinin Adı</strong></label>
+      <input type="text" class="form-control-plaintext" readonly value="{{liste.first_name}}"  name="odogrenci">
+    </div>
+    
+  
+  <div class="form-group col-sm-10">
+    <label><strong>Ödeme</strong></label>
+    <input type="number" class="form-control" name="taksit">
+  </div>
+  <div class="form-group col-sm-10">
+    <label><strong>Açıklama</strong></label>
+    <input type="text" class="form-control" name="aciklama">
+  </div></div>
+  <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+ </div><br>
+<div class="container">
+ <table class="table table-striped">
+  <thead>
+  <tr>
+      
+      <td scope="col" colspan="4" ><h4 class="text-danger">{{liste.first_name}} Yıllık Ücret: {{liste.ucret}} TL ..... Toplam Ödeme: {{result}} TL ..... Kalan: {{kalan}} TL</h4></td>
+      <td><a type="button" class="btn btn-outline-success" href="{% url 'pdfolustur' liste.first_name 'muhasebe'  %}">Ödeme Fişi</a> </td>
+      </tr>
+    <tr>
+      <th scope="col">Sıra </th>  
+      <th scope="col">Ödeme Tarihi</th>
+      <th scope="col">Ödeme Miktarı</th>
+      <th scope="col">İşlemi Yapan</th>
+      <th scope="col">Açıklama</th>
+      <th scope="col"></th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  
+   {% for todo in liste1 %}
+     <tr>
+       <td>{{forloop.counter}} </td>
+        <td> {{todo.odemetarihi}}</td>
+        <td> {{todo.taksit}} TL</td>
+        <td>{{todo.odemeyialan}}  </td>
+        <td>{{todo.aciklama}}</td>
+        
+     </tr>
+     {% endfor %}
+     
+
+      
+         
+        
+    
+  </tbody>
+</table>
+</div>
+{% endblock content %}

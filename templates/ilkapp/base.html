@@ -1,0 +1,249 @@
+
+<!doctype html>
+{% load avatar_tags %}
+{% load auth_extras %}
+{% load mathfilters %}
+{% load static %}
+
+<html lang="tr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+        <link rel="shortcut icon" type="image/png" href="{% static 'favim.ico' %}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <title>{% block title %}
+       
+        {% endblock title %}</title>
+
+        {% block style %}
+    {% endblock style %}
+    
+
+  </head>
+  <body>
+  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <a class="navbar-brand" href="{% url 'index' %}"><img src= {% static krm.logo%} class="rounded-circle" width="64" height="64"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+
+           {% if user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'kurumkayit' %}">Kurum Ekle</a>
+            </li>
+           <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Oturumu Kapat</a>
+            </li>
+          
+            {% else %}
+
+            <li>
+            {% if user.is_authenticated and request.user|has_group:"kurum" %}
+              <a class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Ana Sayfa" href="{% url 'index1' user.username %}"><i class="fas fa-home fa-2x" ></i> <span class="sr-only">(current)</span></a>
+              {% elif user.is_authenticated %}
+              <a class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Ana Sayfa" href="{% url 'index1' user.last_name  %}"><i class="fas fa-home fa-2x" ></i><span class="sr-only">(current)</span></a>      
+             
+             
+             {% endif %}
+            
+             </li>
+            
+            {% if user.is_authenticated and request.user|has_group:"idare" or user.is_superuser or request.user|has_group:"kurum" or request.user|has_group:"ogretmenler"%}
+             <li class="nav-item">
+            {% if user.is_authenticated and request.user|has_group:"idare" %}
+              <a class="nav-link" href="{% url 'dersekle' user.last_name  %}">
+              <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
+
+              Dersler</a>
+              
+             {% elif user.is_authenticated and  request.user|has_group:"kurum" %}
+             <a class="nav-link" href="{% url 'dersekle' user.username %}">Dersler</a>
+             
+               {%endif%}
+            </li>
+            <li class="nav-item">
+            {% if user.is_authenticated and request.user|has_group:"idare" or request.user|has_group:"ogretmenler"  %}
+              <a class="nav-link" href="{% url 'sinifekle' user.last_name %}">Sınıflar</a>
+            {% elif user.is_authenticated and  request.user|has_group:"kurum" or request.user|has_group:"ogretmenler"%}
+            <a class="nav-link" href="{% url 'sinifekle' user.username %}">Sınıflar</a>
+            {%endif%}
+            </li>
+            <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Öğrenci İşlemleri
+        </a>
+         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% if user.is_authenticated and request.user|has_group:"idare" %}
+       
+          <a class="dropdown-item" href="{% url 'register' user.last_name %}">Öğrenci Ekle</a>
+          <a class="dropdown-item" href="{% url 'ogrencilistesi' user.last_name %}">Öğrenci Listesi</a>
+         
+        
+        {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+        
+          <a class="dropdown-item" href="{% url 'register' user.username %}">Öğrenci Ekle</a>
+          <a class="dropdown-item" href="{% url 'ogrencilistesi' user.username %}">Öğrenci Listesi</a>
+          
+        
+         {% elif user.is_authenticated and request.user|has_group:"ogretmenler" %}
+        
+          <a class="dropdown-item" href="{% url 'ogrencilistesi' user.last_name %}">Öğrenci Listesi</a>
+        
+            {% endif %}
+        </div>
+        
+        
+      </li>
+           
+             
+
+             <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Öğretmen İşlemleri
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% if user.is_authenticated and request.user|has_group:"idare" %}
+        
+          <a class="dropdown-item" href="{% url 'ogretmenlistesi' 'hepsi' user.last_name %}">Öğretmen Listesi</a>
+          <a class="dropdown-item" href="{% url 'ogretmenkayit' user.last_name %}">Öğretmen Kayıt</a>
+          <a class="dropdown-item" href="{% url 'birebirekle' user.last_name %}">Birebir Ekle</a>
+          <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.last_name user.first_name  %}">Birebirlerim</a>
+        {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+       
+          <a class="dropdown-item" href="{% url 'ogretmenlistesi' 'hepsi' user.username %}">Öğretmen Listesi</a>
+          <a class="dropdown-item" href="{% url 'ogretmenkayit' user.username %}">Öğretmen Kayıt</a>
+          <a class="dropdown-item" href="{% url 'birebirekle' user.username %}">Birebir Ekle</a>   
+        <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.username user.first_name   %}">Birebirlerim</a>
+        {% elif user.is_authenticated and request.user|has_group:"ogretmenler" %}
+       
+          <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.last_name user.first_name  %}">Birebirlerim</a>
+          <a class="dropdown-item" href="{% url 'ogrencilistesi' user.last_name %}">Öğrenci Listesi</a>
+          
+
+          {%endif%}
+          
+        </div>
+        </li>
+      
+         
+          <li class="nav-item">
+            {% if user.is_authenticated and request.user|has_group:"idare" %}
+              <a class="nav-link" href="{% url 'duyuru' user.last_name  %}">Duyuru</a>
+              
+             {% elif user.is_authenticated and  request.user|has_group:"kurum" %}
+             <a class="nav-link" href="{% url 'duyuru' user.username %}">Duyuru</a>
+             
+               {%endif%}
+            </li>
+
+          
+            {% endif %}
+            
+    {% if user.is_authenticated  %}
+        
+        
+       
+       
+            
+
+            {%if  user.is_authenticated and request.user|has_group:"ogrenciler"%}
+         <li class="nav-item">
+            <a class="nav-link"  href="{% url 'ogrencibbdp' user.last_name user.first_name   %}">Birebirlerim</a>
+          </li>
+            {% endif %}
+          <li class="nav-item">
+            {%if  user.is_authenticated and request.user|has_group:"kurum"%}
+            <a class="nav-link" href="{% url 'gelenmesaj' user.username %}" >Mesajlarım</a>
+            {%else%}
+           <a class="nav-link" href="{% url 'gelenmesaj' user.last_name %}" >Mesajlarım</a>
+           {% endif %}
+            </li>
+            {%if  user.is_authenticated and request.user|has_group:"kurum"%}
+            <li class="nav-item">
+             <a class="nav-link" href="{% url 'odemem' user.username %}" >Ödeme</a>
+            </li>            
+            {% elif  user.is_authenticated and  request.user|has_group:"muhasebe"%}
+            <li class="nav-item">
+             <a class="nav-link" href="{% url 'odemem' user.last_name %}" >Ödeme</a>
+            </li>
+            {% endif %}
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'password_change'%}" >Şifre Değiştir</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Oturumu Kapat</a>
+            </li>
+            
+               {% else %}
+  
+        <li class="nav-item">
+              <a class="nav-link" href="{% url 'user_login' %}">Oturum Aç</a>
+            </li>
+            
+    {% endif %}
+             
+           
+          </ul>
+           {%if  user.is_authenticated and request.user|has_group:"ogretmenler"%}
+        <form class="form-inline my-2 my-lg-0" action="{% url 'ogrenciara' user.last_name %}" method="GET">
+        {% csrf_token %}
+        <input class="form-control mr-sm-2" name=ogrenci  type="search" placeholder="Öğrenci Ara" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Ara</button>
+    </form>
+     {%elif  user.is_authenticated and request.user|has_group:"kurum"%}
+        <form class="form-inline my-2 my-lg-0" action="{% url 'ogrenciara' user.username %}" method="GET">
+        {% csrf_token %}
+        <input type="search" class="form-control mr-sm-2" name=ogrenci   placeholder="Öğrenci Ara" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Ara</button>
+    </form>
+          {% endif %}
+          {% endif %}
+        </div>
+      </nav>
+      {% block content %}
+        {% endblock content %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+function myFunction1() {
+  var x = document.getElementById("fname1");
+  x.value = x.value.toUpperCase();
+}
+function myFunction() {
+  var y = document.getElementById("fname");
+  y.value = y.value.toUpperCase();
+}
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+  
+  
+  
+    
+    {% block javascript %}
+    {% endblock javascript %}
+   
+    
+    
+  </body>
+</html>

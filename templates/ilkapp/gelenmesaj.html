@@ -1,0 +1,58 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+Mesaj Kutusu
+{% endblock title %}
+{% load auth_extras %}
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4"><center>{{user.first_name}}</center></h1>
+      <p class="lead"><center>MESAJLARIM</center></p>
+      
+    </div>
+  </div>
+  <div class="container">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Gönderen</th>
+      <th scope="col">Alıcı</th>
+      <th scope="col">Konu</th>
+      <th scope="col">Tarih/Saat</th>
+      <th scope="col">Oku</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for todo in liste %}
+   
+   <strong>
+       <tr>
+        {%if todo.gonderen == user.first_name%}
+        <td class="text-danger"> Ben</td>
+        <td class="text-danger">{{todo.alici}}</td>
+        <td class="text-danger"> {{todo.baslik}}</td>
+        <td class="text-danger"> {{todo.tarih}}</td>
+        <td> <a href="{% url 'mesajoku' todo.id%}" class="text-danger">Mesajı Oku</a></td>
+        {% else %}
+         <td> {{todo.gonderen}}</td>
+         <td> Ben</td>
+        <td> {{todo.baslik}}</td>
+        <td> {{todo.tarih}}</td>
+         <td> <a href="{% url 'mesajoku' todo.id%}" class="text-success">Mesajı Oku</a></td>
+         {%endif%}
+
+        
+         </tr>
+         </strong>
+      
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+
+ 
+ 
+  
+  
+{% endblock content %}

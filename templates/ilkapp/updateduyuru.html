@@ -1,0 +1,81 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Duyuru Ekle
+{% endblock title %}
+{% block content %}
+ <div class="container">
+  <div class="row">
+    <div class="col-sm">
+      
+    </div>
+    <div class="col-sm">
+      <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+ <div class="mb-3">
+
+ <label >Kurum Kodu</label>
+ {% if user.is_authenticated and request.user|has_group:"idare" %} 
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+ {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+    <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.username}}" >
+
+{%endif%}
+</div>
+<div class="mb-3">
+ <label  class="form-label">Gönderen</label>
+ {% if user.is_authenticated and request.user|has_group:"idare" %} 
+   <input type="text" name="dgonderen" value="{{user.first_name}}" class="form-control"  readonly>
+  {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+  <input type="text" name="dgonderen" value="{{user.last_name}}" class="form-control"  readonly>
+  {%endif%}
+</div>
+
+<div class="mb-3">
+  <label  class="form-label">Başlık</label>
+  <input type="text" name="dbaslik" id="fname" onblur="myFunction()" value="{{todo.dbaslik}}"class="form-control" placeholder="Konu">
+</div>
+<div class="mb-3">
+  <label  class="form-label">Mesajınız</label>
+  <textarea  class="form-control"   name="duyuru" rows="5" cols="40" maxlength="2000">{{todo.duyuru}}</textarea>
+</div>
+<div class="row">
+              <div class="col-sm-5">Öğretmenler için</div>
+              <div class="col-sm-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked="checked" name="dogretmen">
+                  <label class="form-check-label" >
+                    Evet
+                  </label>
+                </div>
+              </div>
+            
+
+              <div class="col-sm-5">Öğrenciler için</div>
+              <div class="col-sm-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked="checked"  name="dogrenci">
+                  <label class="form-check-label" >
+                    Evet
+                  </label>
+                </div>
+              </div>
+            </div>
+<div class="mb-3">
+<button type="submit" class="btn btn-success">Gönder</button>
+</div>
+</form>
+    </div>
+    <div class="col-sm">
+     
+    </div>
+  </div>
+</div>
+ 
+
+ 
+ 
+  
+  
+{% endblock content %}

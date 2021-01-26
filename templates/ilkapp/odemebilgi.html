@@ -1,0 +1,40 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% load django_template_maths %}
+{% load mathfilters %}
+{% block title %}
+Ders Ekleme Formu
+{% endblock title %}
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+    
+        <div class="container">
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sıra</th>  
+      <th scope="col">Ders</th>
+      <th scope="col">Öğretmen Listesi</th>
+      <th scope="col">Sil</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+  
+   {% for todo in liste %}
+     <tr>
+       <td>{{forloop.counter}} </td>
+        <td> {{todo.dersadi}}</td>
+        <td> <a href= "{% url 'ogretmenlistesi' todo.dersadi todo.last_name%}"type="button" class="btn btn-outline-success">Liste</a> </td>
+        <td> <a href="{% url 'deleteders' todo.last_name todo.id %}" type="button" class="btn btn-outline-success">Dersi Kaldır</a></td>
+       
+     </tr>
+         
+        
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+{{konu}}
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+    <p class="lead"><center><strong>Gönderen : {{todo.gonderen}}</strong></center></p>
+    <p class="lead"><center> {{todo.tarih}}</center></p>
+      <h2 class="display-7"><center>{{todo.baslik}}</center></h2>
+      
+      <p class="font-weight-normal"><center>{{todo.mesaj}}</center></p>
+      {% if todo.resim %}
+     <p><center><a href="{% url 'download' todo.id %}" class="text-success" target="blank">Ek Dosya İndir</a></center></p>
+      {%endif%}
+      <p><center><a href="{% url 'message' todo.last_name todo.gonderen %}" type="button" class="btn btn-warning">Yanıtla</a></center></p>
+      
+
+    
+    </div>
+  </div>
+  
+  
+  
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+About
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4"><center>TODO List</center></h1>
+      <p class="lead"><center>yapılacaklar listesi</center></p>
+      <p class="lead"><center>yapılacaklar listesi hazırlayın</center></p>
+      <p class="lead"><center>yapılacaklar listesi düzenleyin</center></p>
+      <p class="lead"><center>yapılacaklar listesi yayınlayın</center></p>
+      <p><center><a type="button" class="btn btn-outline-success" href="{% url 'create' %}">Listeye Ekle</a></center></p>
+    </div>
+  </div>
+{% endblock content %}

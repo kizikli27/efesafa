@@ -1,0 +1,185 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Öğretmen Kayıt
+{% endblock title %}
+{% block content %}
+ <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h1>Kayıt İşlemi Başarılı</h1>
+        
+      {% else %}
+        <h1>Öğretmen Kayıt Formu</h1>
+        <h3>Tüm Alanları doldurun.</h3>
+
+        </div>
+        </div>
+        <div class="container">
+<form enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+  
+   {% if user.is_authenticated and request.user|has_group:"idare" %} 
+    
+  <div class="form-group col-sm-10">
+      <label >Kurum Kodu</label>
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+    </div>  
+       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
+      </div>
+      {%endif%}
+      
+    <div class="form-group col-sm-10">
+      <label >Adı Soyadı</label>
+      <input type="text" class="form-control is-valid" required id="fname" onblur="myFunction()" name="first_name" placeholder="Adı ve Soyadı">
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >E-posta Adresi(Kullanıcı Adı)</label>
+      <input type="email" id="id_nick_name"class="form-control is-valid" required  name="username" placeholder="ornek@ornek.com" >
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Parola</label>
+      <input type="password" class="form-control is-valid" required  name="password" placeholder="Parola">
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >E-mail</label>
+      <input type="email" class="form-control is-valid" required  name="email" placeholder="eposta">
+    </div>
+
+    
+    
+    <div class="form-group col-sm-10">
+      <label >Telefon Numarası</label>
+      <input type="text" class="form-control is-valid" required  name="telefonu" placeholder="tel">
+    </div>
+    <div class="form-group col-sm-10">
+      <label >Adresi</label>
+      <input type="text" class="form-control is-valid" required  name="adres" placeholder="Adres">
+    </div>
+   
+    <div class="form-group col-sm-10">
+      <label >Branşı</label>
+      <select name="bransi" class="custom-select mr-sm-2 is-valid" required >
+  <option>Seçiniz</option>
+  {%for todo in liste%}
+  <option>{{todo.dersadi}}</option>
+  {%endfor%}
+
+  
+</select>
+    </div>
+   
+    <div class="form-group col-sm-10">
+      <label >Yan Branşı</label>
+      <select name="yanbransi" class="custom-select mr-sm-2">
+  <option>Yok</option>
+  {%for todo in liste%}
+  <option>{{todo.dersadi}}</option>
+  {%endfor%}
+
+  
+</select>
+    </div>
+
+      <div class="form-group col-sm-10">
+      <label >İban Numarası</label>
+      <input type="text" class="form-control" name="iban" placeholder="iban numarası">
+    </div>
+    <div class="form-group col-sm-10">
+              <div class="col-sm-2">İdareci mi?</div>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="gridCheck1" name="idareci">
+                  <label class="form-check-label" >
+                    Evet
+                  </label>
+                </div>
+              </div>
+            </div>
+<div class="form-group col-sm-10">
+              <div class="col-sm-2">Muhasebe Yetkisi</div>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="gridCheck1" name="Muhasebe">
+                  <label class="form-check-label" >
+                    Evet
+                  </label>
+                </div>
+              </div>
+            </div>
+    
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+  Öğretmeni Kaydet
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Kaydet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Öğretmen kaydı tamamlanacak...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button type="submit"  class="btn btn-primary">Kaydet</button>
+      </div>
+
+    </div>
+  
+</div>
+    
+        </form>
+        
+      {% endif %}
+  
+  
+
+
+</div>
+{% block javascript %}
+<script>
+    /*
+    On focus out on input nickname,
+    call AJAX get request to check if the nickName
+    already exists or not.
+    */
+    $("#id_nick_name").focus();
+    $("#id_nick_name").focusout(function (e) {
+        e.preventDefault();
+        // get the nickname
+        var username = $(this).val();
+        // GET AJAX request
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'checkusername' %}",
+            data: {"username": username},
+            success: function (response) {
+                // if not valid user, alert the user
+                if(!response["valid"]){
+                    alert("Bu e-posta adresi daha önce kullanıldı lütfen başka bir e-posta adresi giriniz...");
+                    var nickName = $("#id_nick_name");
+                    nickName.val("")
+                    nickName.focus()
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    })
+</script>
+{% endblock javascript %}
+{% endblock content %}

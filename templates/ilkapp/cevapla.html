@@ -1,0 +1,61 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Ana Sayfa
+{% endblock title %}
+
+{% block content %}
+
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      
+    </div>
+    <div class="col-sm">
+      <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+ <div class="mb-3">
+
+ <label >Kurum Kodu</label>
+ {% if user.is_authenticated and request.user|has_group:"idare" %} 
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+ {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+    <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.username}}" >
+
+{%endif%}
+</div>
+<div class="mb-3">
+ <label  class="form-label">Gönderen</label>
+  <input type="text" name="gonderen" value="{{user.first_name}}" class="form-control" placeholder="Başlık" readonly>
+</div>
+<div class="mb-3">
+ <label  class="form-label">Alıcı</label>
+ 
+  <input type="text" name="alici" class="form-control" value="{{alici}}" placeholder="Alıcı" readonly>
+</div>
+<div class="mb-3">
+  <label  class="form-label">Konu</label>
+  <input type="text" name="baslik" class="form-control" placeholder="Konu">
+</div>
+<div class="mb-3">
+  <label  class="form-label">Mesajınız</label>
+  <textarea class="form-control"  name="mesaj" rows="3"></textarea>
+</div>
+<div class="mb-3">
+  <label for="formFile" class="form-label">Dosya</label>
+  <input class="form-control" name="resim" type="file" accept="image/*">
+</div>
+<button type="submit" class="btn btn-success">Gönder</button>
+</form>
+    </div>
+    <div class="col-sm">
+     
+    </div>
+  </div>
+</div>
+ 
+ 
+  
+  
+{% endblock content %}

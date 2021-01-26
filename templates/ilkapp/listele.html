@@ -1,0 +1,42 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+{{sinif}}
+{% endblock title %}
+{% block content %}
+<p>.<p>.<p>.<p>.<p>.
+  <div class="container">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sıra</th>
+      <th scope="col">Kullanıcı Adı</th>
+      <th scope="col">Adı</th>
+      <th scope="col">Sınıfı</th>
+      <th scope="col">Bilgileri</th>
+      <th scope="col">Birebir Programı</th>
+      <th scope="col">Birebir Ekle</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+   {% for todo in liste %}
+  
+       <tr> 
+       <td>{{forloop.counter}} </td>
+        <td> {{todo.username}}</td>
+        
+         <td><a type="button" class="btn btn-outline-success" href="{% url 'ogrbirebirekle' todo.last_name todo.id %}">Birebir Ekle</a> </td>
+         </tr>
+     
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+
+ 
+ 
+  
+  
+{% endblock content %}

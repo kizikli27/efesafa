@@ -1,0 +1,33 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+Ana Sayfa
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4"><center>TODO List</center></h1>
+      <p class="lead"><center>yapılacaklar listesi</center></p>
+      <p><center><a type="button" class="btn btn-outline-success" href="{% url 'create' %}">Listeye Ekle</a></center></p>
+    </div>
+    <form>
+     {% csrf_token %}
+  <div class="form-group">
+    <label>Email address</label>
+    <input type="email" class="form-control" name="username"  placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" name="password" placeholder="Password">
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+</div>
+
+ 
+ 
+  
+  
+{% endblock content %}

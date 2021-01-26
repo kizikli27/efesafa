@@ -1,0 +1,40 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+Örenci Ekle
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4"><center>TODO List</center></h1>
+      <p class="lead"><center>Öğrenci Ekle</center></p>
+      <form method="POST">
+      {% csrf_token %}
+  <div class="form-row">
+    <div class="form-group col-sm-10">
+      <label >Adı</label>
+      <input type="text" class="form-control" name="adi" placeholder="Adı">
+    </div>
+    <div class="form-row">
+    <div class="form-group col-sm-10">
+      <label >telefonu</label>
+      <input type="text" class="form-control" name="telefonu" placeholder="tel">
+    </div>
+    <div class="form-row">
+    <div class="form-group col-sm-10">
+      <label >sınıfı</label>
+      <input type="text" class="form-control" name="sinifi" placeholder="sınıfı">
+    </div>
+    <div class="form-row">
+    <div class="form-group col-sm-10">
+      <label >numarası</label>
+      <input type="text" class="form-control" name="numarasi" placeholder="numarası">
+    </div>
+    <div class="col-sm-10">
+                <button type="submit" class="btn btn-success">ekle</button>
+              </div>
+    
+</form>
+    </div>   </div>
+
+</div>
+{% endblock content %}

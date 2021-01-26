@@ -1,0 +1,100 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% load django_template_maths %}
+{% load mathfilters %}
+{% load static %}
+
+{% block title %}
+Öğrenci Kayıt
+{% endblock title %}
+{% block logo %}
+{%static krm.logo%}
+{% endblock logo %}
+{% block content %}
+
+
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h1>Kayıt İşlemi Başarılı</h1>
+      {% else %}
+        <h1>Birebir Ders Ekleme Formu</h1>
+        <h3>{{krm.logo}} Tüm Alanları doldurun.</h3>
+       
+        </div>
+        </div>
+        <div class="container">
+<form  method="POST">
+
+{% csrf_token %}
+
+          
+      
+  {% if user.is_authenticated and request.user|has_group:"idare" %} 
+    
+  <div class="form-group col-sm-10">
+      <label >Kurum Kodu</label>
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+    </div>  
+       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
+      </div>
+      {%endif%}
+      <div class="form-row align-items-center">
+    <div class="col-auto">
+      
+      <select name="bbogrenci"  class="form-control">
+      
+        <option selected>Öğrenci</option>
+{%for todo in liste1%}
+        <option>{{todo.first_name}}</option>
+        {%endfor%}
+      </select>
+    </div>
+      
+    <div class="col-auto">
+      
+      <select name="bbdersadi"  class="form-control">
+        <option selected>Ders</option>
+        {%for todo in liste%}
+        <option>{{todo.dersadi}}</option>
+        {%endfor%}
+      </select>
+    </div>
+    <div class="col-auto">
+      <select name="bbogretmen"  class="form-control">
+        <option selected>Öğretmen</option>
+         {%for todo in liste2%}
+        <option>{{todo.first_name}}</option>
+        {%endfor%}
+      </select>
+    </div>
+    <div class="col-auto">
+      <select name="bbgun" class="form-control">
+        <option selected>Gün Seçiniz</option>
+         {%for todo in liste5%}
+        <option value="{{todo.id}}">{{todo.gunler}}</option>
+        {%endfor%}
+        
+        
+        
+      </select>
+    </div>
+    <div class="col-auto">
+      <input type="time" name="bbsaati" class="form-control">
+        
+    </div>
+   
+    <div class="col-auto">
+      <input type="time" name="bbbitissaati" class="form-control">
+        
+    </div>
+     </div>
+   <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+    
+ {% endif %}
+{% endblock content %}

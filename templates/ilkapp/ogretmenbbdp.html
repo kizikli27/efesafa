@@ -1,0 +1,108 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+{{adi}}
+{% endblock title %}
+{% block content %}
+
+
+  <div class="container">
+<table class="table table-bordered table-sm">
+  <thead>
+  
+    <tr>
+       <th colspan="5"  scope="col">Birebir ders programınız..   
+       {{adi}} <font color="red"> {{aldigibb}}</font>  birebir dersi listelendi
+       <a href="{% url 'pdfolustur' adi 'ogretmen' %}" class="text-success" target="blank">İndir</a>
+       </th>
+    </tr>
+    
+    
+    <tr>
+    <td>Pazartesi </td>
+    {% for todo in pazartesi %}
+    <td>{{todo.bbsaati}} -{{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen' %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+    <tr>
+    <td>Salı </td>
+    {% for todo in sali %}
+    <td>{{todo.bbsaati}} - {{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen'  %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+     <tr>
+    <td>Çarşamba</td>
+    {% for todo in carsamba %}
+    <td>{{todo.bbsaati}} - {{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen' %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+     <tr>
+    <td>Perşembe </td>
+    {% for todo in persembe %}
+    <td>{{todo.bbsaati}} - {{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen' %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+     <tr>
+    <td>Cuma</td>
+    {% for todo in cuma%}
+    <td>{{todo.bbsaati}} - {{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen' %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+     <tr>
+    <td>Cumartesi</td>
+    {% for todo in cumartesi%}
+    <td>{{todo.bbsaati}} - {{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen' %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+     <tr>
+    <td>Pazar</td>
+    {% for todo in pazar%}
+    <td>{{todo.bbsaati}} - {{todo.bbbitissaati}} <br>{{todo.bbdersadi}}-{{todo.bbogrenci}}
+    <br>{% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%} 
+        <a href="{% url 'deletebb' todo.last_name todo.id 'ogretmen'  %}" type="button" class="btn btn-outline-success">Sil</a>
+        {%endif%}
+    </td>
+     {% endfor %}
+    </tr>
+    <tr>
+        <td align="center" colspan="6"><a href="{% url 'pdfolustur' adi 'ogretmen' %}" type="button" class="btn btn-outline-success">İndir</a></td>
+         </tr>
+     
+       
+
+  
+      
+   
+  </tbody>
+ 
+</div>
+
+ 
+ 
+  
+  
+{% endblock content %}

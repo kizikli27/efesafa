@@ -1,0 +1,116 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Duyuru Ekle
+{% endblock title %}
+{% block content %}
+ 
+  <div class="row">
+    <div class="col-sm" >
+      <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sıra</th>
+      <th scope="col">Konu</th>
+      <th scope="col">Gönderen</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for todo in liste %}
+   
+       <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{todo.dbaslik}}</td>
+        <td>{{todo.dgonderen}}</td>
+           
+        <td>
+         {% if user.is_authenticated and request.user|has_group:"kurum" and  todo.dgonderen == user.last_name or user.is_authenticated and request.user|has_group:"idare" and  todo.dgonderen == user.first_name  %}
+                  
+        <a href="{% url 'updateduyuru' todo.last_name todo.id %}" type="button" class="btn btn-outline-success">Düzenle</a>
+        {% endif %}
+        </td>
+        
+        <td>
+        {% if user.is_authenticated and request.user|has_group:"kurum" and  todo.dgonderen == user.last_name or user.is_authenticated and request.user|has_group:"idare" and  todo.dgonderen == user.first_name  %}
+         
+        <a href="{% url 'deleteduyuru' todo.last_name todo.id %}" type="button" class="btn btn-outline-success">Sil</a>
+        {% endif %}
+        </td>
+         </tr>
+      
+   {% endfor %}
+  </tbody>
+</table>
+    </div>
+    <div class="col-sm">
+      <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+ <div class="mb-3">
+
+ <label >Kurum Kodu</label>
+ {% if user.is_authenticated and request.user|has_group:"idare" %} 
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+ {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+    <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.username}}" >
+
+{%endif%}
+</div>
+<div class="mb-3">
+ <label  class="form-label">Gönderen</label>
+ {% if user.is_authenticated and request.user|has_group:"idare" %} 
+   <input type="text" name="dgonderen" value="{{user.first_name}}" class="form-control"  readonly>
+  {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+  <input type="text" name="dgonderen" value="{{user.last_name}}" class="form-control"  readonly>
+  {%endif%}
+</div>
+
+<div class="mb-3">
+  <label  class="form-label">Başlık</label>
+  <input type="text" name="dbaslik" id="fname" onblur="myFunction()" class="form-control" placeholder="Konu">
+</div>
+<div class="mb-3">
+  <label  class="form-label">Duyuru Metni</label>
+  <textarea  class="form-control"  name="duyuru" rows="5" cols="40" maxlength="1000"></textarea>
+</div>
+<div class="row">
+              <div class="col-sm-5">Öğretmenler için</div>
+              <div class="col-sm-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked="checked" name="dogretmen">
+                  <label class="form-check-label" >
+                    Evet
+                  </label>
+                </div>
+              </div>
+            
+
+              <div class="col-sm-5">Öğrenciler için</div>
+              <div class="col-sm-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked="checked"  name="dogrenci">
+                  <label class="form-check-label" >
+                    Evet
+                  </label>
+                </div>
+              </div>
+            </div>
+<div class="mb-3">
+<button type="submit" class="btn btn-success">Gönder</button>
+</div>
+</form>
+    </div>
+    <div class="col-sm">
+    
+    </div>
+  </div>
+
+ 
+
+ 
+ 
+  
+  
+{% endblock content %}

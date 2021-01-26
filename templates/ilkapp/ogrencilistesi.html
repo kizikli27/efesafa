@@ -1,0 +1,85 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+{{sinif}}
+{% endblock title %}
+
+{% block content %}
+ {%if parola%}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+   
+      <h1 class="display-4"><center><strong>{{userim.username}}</strong><br>kullanıcısının parolası <br><strong> {{parola}}</strong> <br>olarak değiştirildi </center></h1>
+       </div>
+  </div>
+    {%else%}
+    
+    
+    </div>
+  </div>
+ <div> 
+<table class="table table-striped">
+  <thead>
+  <tr>
+  <td colspan="13">{% if sinif %}{{sinif}} sınıfında {% endif %} <strong>{{sayi}}</strong> öğrenci listelendi
+   {% if user.is_authenticated and request.user|has_group:"idare" %}
+              <a class="btn btn-outline-success" href="{% url 'register' user.last_name %}">Öğrenci Ekle</a>
+              {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+              <a class="btn btn-outline-success" href="{% url 'register' user.username %}">Öğrenci Ekle</a>
+              {%endif%}
+    </td>
+    </tr>
+    <tr>
+      <th scope="col">Sıra</th>
+      <th scope="col">No</th>
+      
+      <th scope="col">Adı</th>
+      <th scope="col">Sınıfı</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+       {% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%}
+      <th scope="col"></th>
+      {%endif%}
+      <th scope="col"></th>
+      <th scope="col"></th>
+
+
+    </tr>
+  </thead>
+  
+  <tbody>
+   {% for todo in liste %}
+  
+       <tr> 
+       <td>{{forloop.counter}} </td>
+       <td>{{todo.id}}</td>
+        
+        <td> {{todo.first_name}}</td>
+        <td> {{todo.ksinifi}}</td>
+        <td><a type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Öğrenci Bilgileri" href="{% url 'ogrencibilgileri' todo.last_name todo.first_name %}"><i class="fas fa-info fa-lg" ></i></a> </td>
+        <td><a type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Birebir Bilgileri" href="{% url 'ogrencibbdp' todo.last_name todo.first_name  %}"><i class="fas fa-book-reader fa-lg" ></i></a> </td>
+          {% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%}         
+         <td><a type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Birebir Ekle" href="{% url 'ogrbirebirekle' todo.last_name todo.id 'ogrenci'%}"><i class="fas fa-plus fa-lg" ></i></a> </td>
+         <td><a type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Düzenle" href="{% url 'ogrenciduzenle' todo.last_name todo.id %}"><i class="fas fa-edit fa-lg" ></i></a> </td>
+         {%endif%}
+        <td> <a href="{% url 'message' todo.last_name todo.first_name %}" data-toggle="tooltip" data-placement="bottom" title="Mesaj Gönder" type="button" class="btn btn-outline-success"><i class="fas fa-paper-plane fa-lg" ></i></a></td>
+         <td><a type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="bottom" title="Birebir Programı" href="{% url 'pdfolustur' todo.first_name 'ogrenci'  %}"><i class="fas fa-file-pdf fa-lg" ></i></a> </td>
+           {% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"muhasebe" %}         
+         <td><a type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Ödeme Bilgileri" href="{% url 'muhasebe' todo.last_name todo.id %}"><i class="fas fa-lira-sign fa-lg" ></i></a> </td>
+              {%endif%}
+          {% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare" %}         
+         <td><a type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Kaydı Sil" href="{% url 'ogrencisil' todo.id %}"><i class="fas fa-user-minus fa-lg" ></i></a> </td>
+         <td><a  type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="bottom" title="Şifre Sıfırla" href="{% url 'sifredegistir' todo.id %}" ><i class="fas fa-key fa-lg" ></i></a> </td>
+              {%endif%}                          
+         </tr>
+     
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+
+ {%endif%}
+ 
+  
+  
+{% endblock content %}

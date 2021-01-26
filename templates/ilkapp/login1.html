@@ -1,0 +1,28 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+Oturum Aç
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h3>hatalı kullanıcı adı veya şifresi</h3>
+      {% endif %}
+    <form method="post" action="{% url 'user_login' %}">
+     {% csrf_token %}
+  <div class="form-group">
+    <label>Kullanıcı Adı</label>
+    <input type="text" class="form-control" name="username"  placeholder="user name">
+    <small  class="form-text text-muted">Kullanıcı Adınzı hiç bir ekilde kimseyle paylaşmayız..</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" name="password" placeholder="Password">
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+</div>
+
+{% endblock content %}

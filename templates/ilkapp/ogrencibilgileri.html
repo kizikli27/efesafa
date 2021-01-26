@@ -1,0 +1,73 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+{% for todo in liste %}
+{{todo.first_name}}
+{% endfor %}
+{% endblock title %}
+{% block content %}
+{% load static%}
+  <div class="container">
+  <img src={% static todo.profile_pic %}  width="64" height="64">
+<table class="table">
+  
+ 
+    <tr>
+      <th scope="col">Öğrenci No</th>
+      <td scope="col">{{todo.id}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Tc Kimlik No</th>
+      <td scope="col">{{todo.username}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Adı</th>
+      <td scope="col">{{todo.first_name}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Okulu</th>
+      <td scope="col">{{todo.okulu}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Alanı</th>
+      <td scope="col">{{todo.alani}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Sınıfı</th>
+      <td scope="col">{{todo.ksinifi}}</td>
+    </tr>
+    <tr>
+      <th scope="col">E-posta Adresi</th>
+      <td scope="col">{{todo.email}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Telefon Numarası</th>
+      <td scope="col">{{todo.telefonu}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Veli Adı</th>
+      <td scope="col">{{todo.veliadi}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Veli Telefon Numarası</th>
+      <td scope="col">{{todo.velitelefonu}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Aldığı Birebir Saati</th>
+      <td scope="col">{{aldigibb}}</td>
+    </tr>
+    <tr>
+      <th scope="col">resim</th>
+      <td scope="col">{{todo.profile_pic}}</td>
+    </tr>
+
+
+  
+  
+</table>
+</div>
+
+ 
+ 
+  
+  
+{% endblock content %}

@@ -1,0 +1,69 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+{{ders}}
+{% endblock title %}
+{% block content %}
+
+      
+    </div>
+  </div>
+  <div class="container">
+  <h4 class="text-danger">{% if ders == "hepsi" %}Kurumda {% else %} {{ders}} Dersi{%endif%}  {{sayi}} Öğretmen Listelendi
+  {% if user.is_authenticated and request.user|has_group:"idare" %}
+              <a class="btn btn-outline-success" href="{% url 'ogretmenkayit' user.last_name %}">Öğretmen Ekle</a>
+              {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+              <a class="btn btn-outline-success" href="{% url 'ogretmenkayit' user.username %}">Öğretmen Ekle</a>
+              {%endif%}
+  </h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sıra</th>
+     
+      <th scope="col">Adı</th>
+      <th scope="col">Branşı</th>
+      <th scope="col">Görevi</th>
+      <th scope="col" colspan="5"></th>
+      
+      
+    </tr>
+  </thead>
+  <tbody>
+   {% for todo in liste %}
+  
+       <tr> 
+       <td>{{forloop.counter}} </td>
+        
+        <td> {{todo.first_name}}</td>
+        <td> {{todo.bransi}} , {{todo.yanbransi}}</td>
+        <td>
+        {%if todo.idareci%}
+        İdareci
+        {%else%}
+        Öğretmen
+        {%endif%}
+        </td>
+         <td><a type="button" class="btn btn-outline-success" href="#">Öğretmen Bilgileri</a> </td>
+        <td><a type="button" class="btn btn-outline-success" href="{% url 'ogretmenbbdp' todo.last_name todo.first_name  %}">Birebir Bilgileri</a> </td>
+          {% if user.is_authenticated and request.user|has_group:"kurum" or request.user|has_group:"idare"%}         
+         <td><a type="button" class="btn btn-outline-success" href="{% url 'ogrbirebirekle' todo.last_name todo.id 'ogretmen'%}">Birebir Ekle</a> </td>
+         {%endif%}
+        <td> <a href="{% url 'message' todo.last_name todo.first_name %}" type="button" class="btn btn-outline-success">Mesaj Gönder</a></td>
+         <td><a type="button" class="btn btn-outline-danger" href="{% url 'pdfolustur' todo.first_name 'ogretmen'  %}"><i class="fas fa-file-pdf fa-lg" ></i></a> </td>
+        {% if user.is_authenticated and request.user|has_group:"kurum"%}         
+         <td><a type="button" class="btn btn-outline-success" href="{% url 'yetkiver' todo.id %}">Yetkiler</a> </td>
+         {%endif%}
+         </tr>
+   
+     
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+
+ 
+ 
+  
+  
+{% endblock content %}

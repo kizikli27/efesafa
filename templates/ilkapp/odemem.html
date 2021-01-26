@@ -1,0 +1,31 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+About
+{% endblock title %}
+{% block content %}
+
+    <div class="container">
+      <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Sıra</th>
+      <th scope="col">Adı</th>
+      <th scope="col">Ödeme</th>
+      <th scope="col">Tarih</th>
+      
+      <th scope="col">İşlem Yapan</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for todo in liste %}
+  
+       <tr> 
+       <td>{{forloop.counter}} </td>
+        <td> {{todo.odogrenci}}</td>
+        <td> {{todo.taksit}}</td>
+        <td> {{todo.odemetarihi}}</td>
+        <td> {{todo.odemeyialan}}</td>
+    </tr>
+    {% endfor %}
+  </div>
+{% endblock content %}

@@ -1,0 +1,105 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Ana Sayfa
+{% endblock title %}
+{% load static %}
+{% block style%}
+<style>
+.accordion {
+  background-color: #D6EAF8;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: #AED6F1 ;
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;}
+
+.carousel-inner img {
+    width: 600px;
+    height: 480px;  
+}
+.carousel-caption h3 {
+  background-color: rgba(120, 120, 120, 0.1);
+ 
+
+}
+.carousel-caption {
+  background-color:rgba(120, 120, 120, 0.4);
+  border-radius:10px;
+  
+
+}
+.divim{
+  
+  width:70%;
+  height:50%;
+  margin-left:auto;
+  margin-right:auto;
+  background-color:rgba(255, 255, 255, 1);
+}
+.carousel-item {
+ background-color:rgba(255, 255, 255, 1);
+
+}
+
+</style>
+
+  
+  
+{% endblock style%}
+{% block content %}
+
+  <div class="container">
+  <div class="divim">
+   <div id="demo" class="carousel slide" data-ride="carousel">
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+    <li data-target="#demo" data-slide-to="3"></li>
+    <li data-target="#demo" data-slide-to="4"></li>
+  </ul>
+  
+  
+  <div class="carousel-inner">
+  {% for todo in liste %}
+    <div class="carousel-item {% if forloop.counter == 1 %} active {%endif%}">
+      <img src="{% static krm.logo%}" width="600" height="400">
+      <div class="carousel-caption">
+        <h3>{{todo.dbaslik}}</h3>
+        <p>{{todo.duyuru}}</p>
+      </div>   
+    </div>
+    {% endfor %}
+    
+   
+  </div>
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
+  </div>
+   </div>
+
+
+ 
+{% endblock content %}

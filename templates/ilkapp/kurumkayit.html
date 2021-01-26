@@ -1,0 +1,151 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+Kurum Kayıt
+{% endblock title %}
+{% load static %}
+{% block content %}
+{% if user.is_superuser%}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h1>Kayıt İşlemi Başarılı</h1>
+      {% else %}
+        <h1>Kurum Kayıt Formu</h1>
+        <h3>Tüm Alanları doldurun.</h3>
+  </div>
+  </div>
+  <div class="container">
+<form enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+      
+  
+    <div class="form-group col-sm-10">
+      <label >Kurum Kodu</label>
+      <input type="text"  class="form-control" name="username" placeholder="Kurum Kodu" maxlenght="11">
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Parola</label>
+      <input type="password" class="form-control" name="password" placeholder="Parola">
+    </div>
+<div class="form-group col-sm-10">
+      <label >Kurum Adı</label>
+      <input type="text" class="form-control" name="first_name" placeholder="Kurum Adı">
+    </div>
+    <div class="form-group col-sm-10">
+      <label >E-mail</label>
+      <input type="email" class="form-control" name="email" placeholder="eposta">
+    </div>
+
+    
+
+    <div class="form-group col-sm-10">
+      <label >Sorumlu Kişi</label>
+      <input type="text" class="form-control" name="last_name" placeholder="Müdür">
+    </div>
+    
+    <div class="form-group col-sm-10">
+      <label >Telefon Numarası</label>
+      <input type="text" class="form-control" name="telefonu" placeholder="tel">
+    </div>
+    <div class="form-group col-sm-10">
+      <label >Adres</label>
+      <input type="text" class="form-control" name="adres" placeholder="Adres">
+    </div>
+   
+    <div class="form-group col-sm-10">
+      <select name="il" id="il" class="form-control">
+                <option value="">İl Seçin...</option>
+            </select>
+      </div>
+   
+    <div  class="form-group col-sm-10">
+      <select name="ilce" id="ilce" class="form-control" disabled="disabled">
+                <option value="">İlçe Seçin...</option>
+            </select>
+    </div>
+     
+
+    <div class="form-group col-sm-10">
+      <label >Vergi Dairesi</label>
+      <input type="text" class="form-control" name="vergidairesi" placeholder="Vergi Dairesi Adı">
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Vergi Numarası</label>
+      <input type="text" class="form-control" name="verginumarasi" placeholder="Vergi Numarası">
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Resim</label>
+      <input type="file" class="form-control" name="logo">
+    </div>
+   
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+  Kurumu Kaydet
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Kaydet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Kurum kaydı tamamlanacak...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button type="submit"  class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+    
+        </form>
+        
+      {% endif %}
+  
+  
+</form>
+
+
+{%else%}
+     <h1>Bu sayfayı görme yetkiniz yok</h1>
+{% endif %}
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    $.getJSON("{%static 'json/ilbolge.json'%}", function(sonuc){
+        $.each(sonuc, function(index, value){
+            var row="";
+            row +='<option value="'+value.il+'">'+value.il+'</option>';
+            $("#il").append(row);
+        })
+    });
+
+
+    $("#il").on("change", function(){
+        var il=$(this).val();
+
+        $("#ilce").attr("disabled", false).html("<option value=''>Seçin..</option>");
+        $.getJSON("{%static 'json/il-ilce.json'%}", function(sonuc){
+            $.each(sonuc, function(index, value){
+                var row="";
+                if(value.il==il)
+                {
+                    row +='<option value="'+value.ilce+'">'+value.ilce+'</option>';
+                    $("#ilce").append(row);
+                }
+            });
+        });
+    });
+
+</script>
+{% endblock content %}

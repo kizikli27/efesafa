@@ -1,0 +1,201 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% load django_template_maths %}
+{% load mathfilters %}
+{% load static %}
+{% block title %}
+{{ogrenci.first_name}}
+{% endblock title %}
+{% block content %}
+-
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h1>Kayıt İşlemi Başarılı</h1>
+      {% elif deleted %}
+         <h1>Kayıt Silme İşlemi Başarılı</h1>
+      {%else%}  
+        <h1>{{ogrenci.first_name}} Birebir Ders Ekleme Formu</h1>
+        <h3>{{aldigibb}}  birebir dersi listelendi.</h3>
+
+        </div>
+        </div>
+        <div class="container">
+<form id="birebirform" method="POST">
+
+{% csrf_token %}
+
+          
+      
+  {% if user.is_authenticated and request.user|has_group:"idare" %} 
+    
+  <div class="alert alert-primary form-group col-sm-10">
+      <label >Kurum Kodu</label>
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+    </div>  
+       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext alert alert-primary" name="last_name"  value="{{user.username}}" readonly>
+      </div>
+      {%endif%}
+      <div class="form-row align-items-center">
+    <div class="col-auto ">
+      {%if grup == "ogrenci"%}
+       <input type="text" class="form-control-plaintext alert alert-primary" name="bbogrenci"  value="{{ogrenci.first_name}}" readonly>
+       {%  elif grup == "ogretmen"%}  
+       <input type="text" class="form-control-plaintext alert alert-primary" name="bbogretmen"  value="{{ogrenci.first_name}}" readonly>
+      {%endif%}
+   </div>
+      
+    <div class="col-auto">
+      
+      <select name="bbdersadi"  class="form-control">
+        <option selected>Ders</option>
+        {%for todo in liste%}
+        <option>{{todo.dersadi}}</option>
+        {%endfor%}
+      </select>
+    </div>
+    <div class="col-auto">
+    {%if grup == "ogrenci" %}
+      <select name="bbogretmen"  class="form-control">
+      <option selected>Öğretmen</option>
+     {%  elif grup == "ogretmen"%} 
+      <select name="bbogrenci"  class="form-control">
+        <option selected>Öğrenci</option>
+        {%endif%}
+         {%for todo in liste2%}
+        <option>{{todo.first_name}}</option>
+        {%endfor%}
+      </select>
+    </div>
+    <div class="col-auto">
+      <select name="bbgun" class="form-control">
+        <option selected>Gün Seçiniz</option>
+        {%for todo in liste5%}
+        <option value="{{todo.id}}">{{todo.gunler}}</option>
+        {%endfor%}
+        
+        
+      </select>
+    </div>
+    <div class="col-auto">
+      <input type="time" name="bbsaati" class="form-control">
+        
+    </div>
+<div class="col-auto">
+      <input type="time" name="bbbitissaati" class="form-control">
+        
+    </div>
+    
+    
+   <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+    
+ {% endif %}
+ <div class="container">
+<table class="table" id="bb">
+  <thead>
+    <tr>
+      <th scope="col">Gün</th>
+      <th scope="col">Başlama</th>
+      <th scope="col">Bitiş</th>
+      <th scope="col">Ders</th>
+       <th scope="col">Öğrenci</th>
+      <th scope="col">Öğretmen</th>
+      
+      <th scope="col">Sil</th>
+    </tr>
+  </thead>
+  <tbody>
+   {% for todo in liste4 %}
+  
+       <tr> 
+       <td> {% if todo.bbgun == 1 %}
+        Pazartesi
+        {% elif todo.bbgun == 2 %}
+        Salı
+        {% elif todo.bbgun == 3 %}
+        Çarşamba
+        {% elif todo.bbgun == 4 %}
+        Perşembe
+        {% elif todo.bbgun == 5 %}
+        Cuma
+        {% elif todo.bbgun == 6 %}
+        Cumartesi
+        {% elif todo.bbgun == 7 %}
+        Pazar
+        {% else %} 
+        {{todo.bbgun}}
+        {%endif%}</td>
+        <td>{{todo.bbsaati}}</td>
+        <td>{{todo.bbbitissaati}}</td>
+        <td>{{todo.bbdersadi}} </td>
+       <td>{{todo.bbogrenci}} </td>
+        <td>{{todo.bbogretmen}} </td>
+        
+        
+        
+       
+        <td><a href="{% url 'deletebb' todo.last_name todo.id grup %}" type="button" class="btn btn-danger">Sil</a></td>
+         </tr>
+   
+     
+   {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock content %}
+{% block javascript %}
+<script>
+    /*
+        On submiting the form, send the POST ajax
+        request to server and after successfull submission
+        display the object.
+    */
+    $("#birebirform").submit(function (e) {
+        // preventing from page reload and default actions
+        e.preventDefault();
+        // serialize the data for sending the form data.
+        var serializedData = $(this).serialize();
+        // make POST ajax call
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'ogrbirebireklekaydet' ogrenci.last_name ogrenci.id grup %}",
+            data: serializedData,
+            success: function (response) {
+                // on successfull creating object
+                // 1. clear the form.
+                $("#birebirform").trigger('reset');
+                // 2. focus to nickname input 
+                
+
+                // display the newly friend to table.
+                var instance = JSON.parse(response["instance"]);
+                var fields = instance[0]["fields"];
+                
+                $("#bb tbody").prepend(
+                    `<tr>
+                    <td>${fields["bbgun"]||""}</td>
+                    <td>${fields["bbsaati"]||""}</td>
+                    <td>${fields["bbbitissaati"]||""}</td>
+                    <td>${fields["bbdersadi"]||""}</td>
+                    <td>${fields["bbogrenci"]||""}</td>  
+                    <td>${fields["bbogretmen"]||""}</td>                                              
+                    
+                   
+                    </tr>`
+                )
+            },
+            error: function (response) {
+                // alert the error if any error occured
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    })
+</script>
+
+
+{% endblock javascript %}

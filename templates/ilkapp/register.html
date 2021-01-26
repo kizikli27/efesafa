@@ -1,0 +1,219 @@
+{% extends "ilkapp/base.html" %}
+{% load auth_extras %}
+{% block title %}
+Öğrenci Kayıt
+{% endblock title %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      {% if registered %}
+        <h1>Kayıt İşlemi Başarılı</h1>
+         
+            {% if user.is_authenticated and request.user|has_group:"idare" %}
+              <a  class="btn btn-light" href="{% url 'register' user.last_name %}">Yeni Kayıt</a>
+            {% elif user.is_authenticated and  request.user|has_group:"kurum" %}
+            <a  class="btn btn-light" href="{% url 'register' user.username %}">Yeni Kayıt</a>
+            {%endif%}
+      {% else %}
+        <h1>Öğrenci Kayıt Formu</h1>
+        <h3>Tüm Alanları doldurun.</h3>
+
+        </div>
+        </div>
+        <div class="container">
+<form enctype="multipart/form-data" method="POST">
+          {% csrf_token %}
+      
+  {% if user.is_authenticated and request.user|has_group:"idare" %} 
+    
+  <div class="form-group col-sm-10">
+      <label >Kurum Kodu</label>
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+    </div>  
+       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
+      </div>
+      {%endif%}
+    <div class="form-group col-sm-10">
+      <label >E-posta Adresi</label>
+      <input type="email" class="form-control is-valid" id="id_nick_name" name="username" placeholder="deneme@deneme.com"  required>
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Parola</label>
+      <input type="password" class="form-control is-valid" name="password" placeholder="Parola" required>
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >E-mail</label>
+      <input type="email" class="form-control is-valid" name="email" placeholder="eposta" required>
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Adı Soyadı</label>
+      <input type="text" class="form-control is-valid" id="fname" onblur="myFunction()" name="first_name" placeholder="Adı" required>
+    </div>
+
+    
+    <div class="form-group col-sm-10">
+      <label >Telefon Numarası</label>
+      <input type="text" class="form-control is-valid" name="telefonu" placeholder="tel" required>
+    </div>
+    <div class="form-group col-sm-10">
+      <label >Okulu</label>
+      <input type="text" class="form-control is-valid" name="okulu" placeholder="Devam ettiği veya mezun olduğu okul adı" required>
+    </div>
+   
+    <div class="form-group col-sm-10">
+      <label >Sınıf Seviyesi</label>
+      <select name="sinifi" class="custom-select mr-sm-2 is-valid" required>
+  <option>Seçiniz</option>
+  <option>1</option>
+  <option>2</option>
+  <option>3</option>
+  <option>4</option>
+  <option>5</option>
+  <option>6</option>
+  <option>7</option>
+  <option>8</option>
+  <option>9</option>
+  <option>10</option>
+  <option>11</option>
+  <option>12</option>
+  <option>Mezun</option>
+</select>
+    </div>
+   
+    <div class="form-group col-sm-10">
+      <label >Alanı</label>
+      <select name="alani" class="custom-select mr-sm-2 is-valid" required>
+  <option>Yok</option>
+  <option>Sayısal</option>
+  <option>Sözel</option>
+  <option>Eşit Ağırlık</option>
+</select>
+    </div>
+
+      <div class="form-group col-sm-10" >
+      <label >Veli Adı</label>
+      <input type="text" class="form-control is-valid" required name="veliadi" placeholder="Veli Adı" >
+    </div>
+
+    <div class="form-group col-sm-10">
+      <label >Veli Telefonu</label>
+      <input type="text" class="form-control is-valid" name="velitelefonu" placeholder="Veli Telefonu"  required>
+    </div>
+
+    <div class="form-group col-sm-10" >
+      <label >Birebir Ders Saati</label>
+      <input type="text" class="form-control is-valid"  name="birebisaati" placeholder="Alacağı Birebir Saat" required>
+    </div>
+  <div class="form-group col-sm-10">
+      <label >Sınıfı</label>
+      <select name="ksinifi" class="custom-select mr-sm-2 is-valid" required>
+      
+  <option>Seçiniz</option>
+  {%for todo in liste%}
+  <option>{{todo.ksinifi}}</option>
+  {%endfor%}
+
+</select>
+
+    </div>
+    <div class="form-group col-sm-10">
+      <label >Toplam Ücret</label>
+      <input type="text" class="form-control is-valid" name="ucret" placeholder="Ücreti"  required>
+    </div>
+<div class="form-group col-sm-10">
+      <label >Taksit</label>
+      <select name="taksitsayisi" class="custom-select mr-sm-2 is-valid" required>
+ 
+  <option value="1">Peşin</option>
+  <option value="2">2 Taksit</option>
+  <option value="3">3 Taksit</option>
+  <option value="4">4 Taksit</option>
+  <option value="5">5 Taksit</option>
+  <option value="6">6 Taksit</option>
+  <option value="7">7 Taksit</option>
+  <option value="8">8 Taksit</option>
+  <option value="9">9 Taksit</option>
+  <option value="10">10 Taksit</option>
+  </select>
+
+    <div class="form-group col-sm-10">
+      <label >Resim</label>
+      <input type="file" class="form-control" name="profile_pic" accept="image/*">
+    </div>
+    
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+  Öğrenciyi Kaydet
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Kaydet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Öğrenci kaydı tamamlanacak...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button type="submit"  class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  
+</div>
+    
+        </form>
+        
+      {% endif %}
+  
+  
+</form>
+
+</div>
+{% block javascript %}
+<script>
+    /*
+    On focus out on input nickname,
+    call AJAX get request to check if the nickName
+    already exists or not.
+    */
+    $("#id_nick_name").focus();
+    $("#id_nick_name").focusout(function (e) {
+        e.preventDefault();
+        // get the nickname
+        var username = $(this).val();
+        // GET AJAX request
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'checkusername' %}",
+            data: {"username": username},
+            success: function (response) {
+                // if not valid user, alert the user
+                if(!response["valid"]){
+                    alert("Bu kullanıcı adı daha önce kullanıldı");
+                    var nickName = $("#id_nick_name");
+                    nickName.val("")
+                    nickName.focus()
+                }
+            },
+            error: function (response) {
+                console.log(response)
+            }
+        })
+    })
+</script>
+
+
+{% endblock javascript %}
+{% endblock content %}

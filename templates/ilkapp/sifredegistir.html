@@ -1,0 +1,37 @@
+{% extends "ilkapp/base.html" %}
+{% block title %}
+Şifre
+{% endblock title %}
+{% block style %}
+<style>
+.divim {
+magin-left:auto;
+margin-right:auto;
+width:40%;
+      
+    }
+</style>
+    {% endblock style %}
+    
+{% block content %}
+
+    <div class="divim">
+    <form class="form-inline my-2 my-lg-0" action="{% url 'sifredegistir' ogrenci_id %}" method="GET">
+    {% csrf_token %}
+       <div class="mb-3 row">
+    <label  class="col-sm-2 col-form-label">Kullanıcı Adı</label>
+    <div class="col-sm-10">
+      <input type="text"  class="form-control-plaintext" value="userim.username" >
+    </div>
+  </div>
+  <div class="mb-3 row">
+    <label class="col-sm-2 col-form-label" >Parola</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" name="pass">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalLong">Değiştir</button>
+  </form>
+    </div>
+  
+{% endblock content %}
