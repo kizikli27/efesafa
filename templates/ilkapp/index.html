@@ -10,45 +10,14 @@ Ana Sayfa
 {% block content %}
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-4"><center>TODO List</center></h1>
-      <p class="lead"><center>yapılacaklar listesi</center></p>
-      <p><center><a type="button" class="btn btn-outline-success" href="{% url 'create' %}">Listeye Ekle</a></center></p>
+      <h1 class="display-4"><center>E-Ddershane</center></h1>
+      <h3 class="lead"><center>Özel Eğitim Kurumları Yönetim ve Bilgi Sistemi</center></h3>
+      
     </div>
   </div>
   
   <div class="container">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">ToDo Adı</th>
-      <th scope="col">Bitti</th>
-      <th scope="col">Tarih</th>
-      <th scope="col">Sil</th>
-      <th scope="col">Güncelle</th>
-    </tr>
-  </thead>
-  <tbody>
-   {% for todo in liste %}
-   {% if todo.finished %}
-       <tr>
-        <td><del> {{todo.title}}</del></td>
-        <td> <a href="{% url 'yesFinish' todo.id %}" type="button" class="btn btn-success">Yes</a></td>
-        <td> {{todo.date}}</td>
-        <td> <a href="{% url 'delete' todo.id %}" type="button" class="btn btn-danger">Delete</a></td>
-        <td> <a href="{% url 'update' todo.id %}" type="button" class="btn btn-warning">Update</a></td>
-         </tr>
-    {% else %} 
-         <tr>
-        <td> {{todo.title}}</td>
-        <td> <a href="{% url 'noFinish' todo.id %}" type="button" class="btn btn-warning">Efecan</a></td>
-        <td> {{todo.date}}</td>
-        <td> <a href="{% url 'delete' todo.id %}" type="button" class="btn btn-danger">Delete</a></td>
-        <td> <a href="{% url 'update' todo.id %}" type="button" class="btn btn-success">Update</a></td>
-         </tr>
-      {% endif %}     
-   {% endfor %}
-  </tbody>
-</table>
+Lütfen Oturum Açın...
 </div>
 
  
