@@ -136,7 +136,6 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_DIR = (BASE_DIR/'ilkapp/static')
 MEDIA_DIR = STATIC_DIR
-STATICFILES_DIRS = [BASE_DIR / "static",]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = 'ilkapp/static/'
 
