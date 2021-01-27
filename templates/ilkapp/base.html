@@ -60,22 +60,24 @@
             
             {% if user.is_authenticated and request.user|has_group:"idare" or user.is_superuser or request.user|has_group:"kurum" or request.user|has_group:"ogretmenler"%}
              <li class="nav-item">
-            {% if user.is_authenticated and request.user|has_group:"idare" %}
+             {% if user.is_authenticated and  request.user|has_group:"kurum" %}
+             <a class="nav-link" href="{% url 'dersekle' user.username %}">Dersler</a>
+            {% elif user.is_authenticated and request.user|has_group:"idare" %}
               <a class="nav-link" href="{% url 'dersekle' user.last_name  %}">
               <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
 
               Dersler</a>
               
-             {% elif user.is_authenticated and  request.user|has_group:"kurum" %}
-             <a class="nav-link" href="{% url 'dersekle' user.username %}">Dersler</a>
+             
              
                {%endif%}
             </li>
             <li class="nav-item">
-            {% if user.is_authenticated and request.user|has_group:"idare" or request.user|has_group:"ogretmenler"  %}
-              <a class="nav-link" href="{% url 'sinifekle' user.last_name %}">Sınıflar</a>
-            {% elif user.is_authenticated and  request.user|has_group:"kurum" or request.user|has_group:"ogretmenler"%}
+            {% if user.is_authenticated and  request.user|has_group:"kurum" or request.user|has_group:"ogretmenler"%}
             <a class="nav-link" href="{% url 'sinifekle' user.username %}">Sınıflar</a>
+            {% elif user.is_authenticated and request.user|has_group:"idare" or request.user|has_group:"ogretmenler"  %}
+              <a class="nav-link" href="{% url 'sinifekle' user.last_name %}">Sınıflar</a>
+            
             {%endif%}
             </li>
             <li class="nav-item dropdown">
@@ -83,16 +85,17 @@
           Öğrenci İşlemleri
         </a>
          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        {% if user.is_authenticated and request.user|has_group:"idare" %}
+         {% if user.is_authenticated and request.user|has_group:"kurum" %}
+        
+          <a class="dropdown-item" href="{% url 'register' user.username %}">Öğrenci Ekle</a>
+          <a class="dropdown-item" href="{% url 'ogrencilistesi' user.username %}">Öğrenci Listesi</a>
+        {% elif user.is_authenticated and request.user|has_group:"idare" %}
        
           <a class="dropdown-item" href="{% url 'register' user.last_name %}">Öğrenci Ekle</a>
           <a class="dropdown-item" href="{% url 'ogrencilistesi' user.last_name %}">Öğrenci Listesi</a>
          
         
-        {% elif user.is_authenticated and request.user|has_group:"kurum" %}
         
-          <a class="dropdown-item" href="{% url 'register' user.username %}">Öğrenci Ekle</a>
-          <a class="dropdown-item" href="{% url 'ogrencilistesi' user.username %}">Öğrenci Listesi</a>
           
         
          {% elif user.is_authenticated and request.user|has_group:"ogretmenler" %}
@@ -112,18 +115,19 @@
           Öğretmen İşlemleri
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        {% if user.is_authenticated and request.user|has_group:"idare" %}
-        
-          <a class="dropdown-item" href="{% url 'ogretmenlistesi' 'hepsi' user.last_name %}">Öğretmen Listesi</a>
-          <a class="dropdown-item" href="{% url 'ogretmenkayit' user.last_name %}">Öğretmen Kayıt</a>
-          <a class="dropdown-item" href="{% url 'birebirekle' user.last_name %}">Birebir Ekle</a>
-          <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.last_name user.first_name  %}">Birebirlerim</a>
-        {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+        {% if user.is_authenticated and request.user|has_group:"kurum" %}
        
           <a class="dropdown-item" href="{% url 'ogretmenlistesi' 'hepsi' user.username %}">Öğretmen Listesi</a>
           <a class="dropdown-item" href="{% url 'ogretmenkayit' user.username %}">Öğretmen Kayıt</a>
           <a class="dropdown-item" href="{% url 'birebirekle' user.username %}">Birebir Ekle</a>   
         <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.username user.first_name   %}">Birebirlerim</a>
+        {% elif user.is_authenticated and request.user|has_group:"idare" %}
+        
+          <a class="dropdown-item" href="{% url 'ogretmenlistesi' 'hepsi' user.last_name %}">Öğretmen Listesi</a>
+          <a class="dropdown-item" href="{% url 'ogretmenkayit' user.last_name %}">Öğretmen Kayıt</a>
+          <a class="dropdown-item" href="{% url 'birebirekle' user.last_name %}">Birebir Ekle</a>
+          <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.last_name user.first_name  %}">Birebirlerim</a>
+        
         {% elif user.is_authenticated and request.user|has_group:"ogretmenler" %}
        
           <a class="dropdown-item" href="{% url 'ogretmenbbdp' user.last_name user.first_name  %}">Birebirlerim</a>
@@ -137,11 +141,13 @@
       
          
           <li class="nav-item">
-            {% if user.is_authenticated and request.user|has_group:"idare" %}
+          {% if user.is_authenticated and  request.user|has_group:"kurum" %}
+             <a class="nav-link" href="{% url 'duyuru' user.username %}">Duyuru</a>
+
+            {% elif user.is_authenticated and request.user|has_group:"idare" %}
               <a class="nav-link" href="{% url 'duyuru' user.last_name  %}">Duyuru</a>
               
-             {% elif user.is_authenticated and  request.user|has_group:"kurum" %}
-             <a class="nav-link" href="{% url 'duyuru' user.username %}">Duyuru</a>
+             
              
                {%endif%}
             </li>
