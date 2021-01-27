@@ -134,6 +134,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_DIR = (BASE_DIR/'ilkapp/static')
+MEDIA_DIR = STATIC_DIR
+STATICFILES_DIRS = [BASE_DIR / "static",]
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = 'ilkapp/static/'
 
 # Uncomment if you have extra static files and a directory in your GitHub repo.
 # If you don't have this directory and have this uncommented your build will fail
