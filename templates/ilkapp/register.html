@@ -8,11 +8,11 @@
     <div class="container">
       {% if registered %}
         <h1>Kayıt İşlemi Başarılı</h1>
-         
-            {% if user.is_authenticated and request.user|has_group:"idare" %}
-              <a  class="btn btn-light" href="{% url 'register' user.last_name %}">Yeni Kayıt</a>
-            {% elif user.is_authenticated and  request.user|has_group:"kurum" %}
+         {% if user.is_authenticated and  request.user|has_group:"kurum" %}
             <a  class="btn btn-light" href="{% url 'register' user.username %}">Yeni Kayıt</a>
+            {% elif user.is_authenticated and request.user|has_group:"idare" %}
+              <a  class="btn btn-light" href="{% url 'register' user.last_name %}">Yeni Kayıt</a>
+            
             {%endif%}
       {% else %}
         <h1>Öğrenci Kayıt Formu</h1>
@@ -23,18 +23,18 @@
         <div class="container">
 <form enctype="multipart/form-data" method="POST">
           {% csrf_token %}
-      
-  {% if user.is_authenticated and request.user|has_group:"idare" %} 
+       {% if user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
+      </div>
+  {% elif user.is_authenticated and request.user|has_group:"idare" %} 
     
   <div class="form-group col-sm-10">
       <label >Kurum Kodu</label>
       <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
     </div>  
-       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
-      <div class="form-group col-sm-10">
-       <label >Kurum Kodu</label>
-       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
-      </div>
+      
       {%endif%}
     <div class="form-group col-sm-10">
       <label >E-posta Adresi</label>
