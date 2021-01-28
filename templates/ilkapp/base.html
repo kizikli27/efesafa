@@ -73,7 +73,7 @@
                {%endif%}
             </li>
             <li class="nav-item">
-            {% if user.is_authenticated and  request.user|has_group:"kurum" or request.user|has_group:"ogretmenler"%}
+            {% if user.is_authenticated and  request.user|has_group:"kurum"%}
             <a class="nav-link" href="{% url 'sinifekle' user.username %}">Sınıflar</a>
             {% elif user.is_authenticated and request.user|has_group:"idare" or request.user|has_group:"ogretmenler"  %}
               <a class="nav-link" href="{% url 'sinifekle' user.last_name %}">Sınıflar</a>
