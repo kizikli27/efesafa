@@ -22,18 +22,18 @@ Ders Ekleme Formu
         <div class="container">
 <form enctype="multipart/form-data" method="POST">
           {% csrf_token %}
-      
-  {% if user.is_authenticated and request.user|has_group:"idare" %} 
+   {% if user.is_authenticated and request.user|has_group:"kurum" %}
+      <div class="form-group col-sm-10">
+       <label >Kurum Kodu</label>
+       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
+      </div>   
+  {% elif user.is_authenticated and request.user|has_group:"idare" %} 
     
   <div class="form-group col-sm-10">
       <label >Kurum Kodu</label>
       <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
     </div>  
-       {% elif user.is_authenticated and request.user|has_group:"kurum" %}
-      <div class="form-group col-sm-10">
-       <label >Kurum Kodu</label>
-       <input type="text" class="form-control-plaintext" name="last_name"  value="{{user.username}}" readonly>
-      </div>
+       
       {%endif%}
     <div class="form-group col-sm-10">
       <label >Ders Adı</label>
