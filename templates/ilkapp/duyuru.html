@@ -51,10 +51,11 @@ Duyuru Ekle
  <div class="mb-3">
 
  <label >Kurum Kodu</label>
- {% if user.is_authenticated and request.user|has_group:"idare" %} 
-      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
- {% elif user.is_authenticated and request.user|has_group:"kurum" %}
+  {% if user.is_authenticated and request.user|has_group:"kurum" %}
     <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.username}}" >
+ {% elif user.is_authenticated and request.user|has_group:"idare" %} 
+      <input type="text" readonly class="form-control-plaintext" name="last_name"  value="{{user.last_name}}" >
+ 
 
 {%endif%}
 </div>
