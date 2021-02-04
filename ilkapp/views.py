@@ -1066,7 +1066,7 @@ def odemem(request,kurum):
     if request.user.groups.filter(name='muhasebe').exists() or request.user.groups.filter(name='kurum').exists():     
         if request.user.last_name==kurum or request.user.username==kurum:
             krm=kurums.objects.get(username=kurum)
-            liste=odeme.objects.all().order_by('odogrenci','-odemetarihi')
+            liste=odeme.objects.filter(last_name=kurum).order_by('odogrenci','-odemetarihi')
             return render(request,"ilkapp/odemem.html",{'krm':krm,'liste':liste})
            
     else: 
